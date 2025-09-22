@@ -1,0 +1,10 @@
+.review-card{
+    border:1px solid black;
+    width:50%;
+}
+
+.review{
+    display:gird;
+    width:100%;
+    grid-template-columns: 2fr 1fr;
+}
