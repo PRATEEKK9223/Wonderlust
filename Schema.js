@@ -2,8 +2,8 @@ const joi=require("joi");
 
 // this is schema validation for Listing
 const schemaValidation=joi.object({
-    title: joi.string().min(3).max(30).required(),
-    description:joi.string().max(100).required(),
+    title: joi.string().min(3).max(100).required(),
+    description:joi.string().max(1000).required(),
     price:joi.number().min(0).required(),
     image: joi.object({
     filename: joi.string().default("file name"),
