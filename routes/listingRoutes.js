@@ -22,7 +22,6 @@ const ListingValidation =(req,res,next)=>{
 // Listing route
 router.get("/listing",asyncWrap(async (req,res)=>{
     let list=await Model.find();
-    // console.log(list);
     res.render("./listings/index",{list});
 }));
 
@@ -40,6 +39,7 @@ router.patch("/update/:id",ListingValidation,asyncWrap(async (req,res)=>{
     let data=req.body;
     let{id}=req.params;
     await Model.findOneAndUpdate({_id:id},data,{new:true,runValidator:true});
+    req.flash("success","listing updated successfully");
     res.redirect(`/show/${id}`);
 }));
 
@@ -52,8 +52,8 @@ router.get("/new",(req,res)=>{
 // Add route
 router.post("/insert",ListingValidation,asyncWrap(async (req,res)=>{
     const newData=new Model(req.body);
-    await newData.save()
-    console.log("inserted sucessfully");
+    await newData.save();
+    req.flash("success","New listing added");
     res.redirect("/listing");
 }));
 
@@ -69,6 +69,7 @@ router.get("/show/:id",asyncWrap(async (req,res)=>{
 router.delete("/delete/:id",asyncWrap(async (req,res)=>{
     let {id}=req.params;
     await Model.findByIdAndDelete(id);
+    req.flash("deleted","listing deleted successfully");
     res.redirect("/listing");
 }));
 

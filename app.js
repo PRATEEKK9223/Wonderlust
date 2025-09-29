@@ -9,14 +9,9 @@ const ejsMate=require("ejs-mate");
 const customError=require("./utils/customError.js");
 const Listings=require("./routes/listingRoutes.js");
 const Reviews=require("./routes/reviewRoutes.js");
+const session=require("express-session");
+const flash=require("connect-flash");
 
-
-
-app.set("port",3000);
-const port=app.get("port");
-app.listen(port,()=>{
-    console.log("server is runing at "+port +"..........");
-});
 
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"/views"));
@@ -26,6 +21,20 @@ app.use(express.json());
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"public")));
 
+
+app.use(session({
+    secret:"prk_wonderlust",
+    resave:false,
+    saveUninitialized:true,
+}));
+app.use(flash());
+
+
+app.set("port",3000);
+const port=app.get("port");
+app.listen(port,()=>{
+    console.log("server is runing at "+port +"..........");
+});
 
 // ----------DB connection-----------
 async function main(){
@@ -37,6 +46,13 @@ main().then((res)=>{
 }).catch((err)=>{
     console.log("DB Do not Connection Successfully..");
     console.log(err);
+});
+
+// flash middleware
+app.use((req,res,next)=>{
+    res.locals.FlashMeassage1=req.flash("success");
+    res.locals.FlashMeassage2=req.flash("deleted");
+    next();
 });
 
 // listing Rouets
@@ -69,6 +85,7 @@ app.get("/delete",(req,res)=>{
     })
     res.send("deleted sucessfully")
 });
+
 
 
 
