@@ -31,7 +31,7 @@ router.post("/signup",asyncWrap(async (req,res)=>{
         })
        
     }catch(err){
-        req.flash("failed",err.message);
+        req.flash("error",err.message);
         res.redirect("/signup");
     }
 }));
