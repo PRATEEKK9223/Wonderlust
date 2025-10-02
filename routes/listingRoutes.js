@@ -4,6 +4,8 @@ const Model=require("../models/listing.js");
 const asyncWrap=require("../utils/asyncWrap.js");
 const {schemaValidation}=require("../Schema.js");
 const customError=require("../utils/customError.js");
+const {isLoggedIn}=require("../midlewares.js");
+
 
 
 
@@ -28,7 +30,7 @@ router.get("/listing",asyncWrap(async (req,res)=>{
 
 
 // edit form route
-router.get("/edit/:id",asyncWrap(async (req,res)=>{
+router.get("/edit/:id",isLoggedIn,asyncWrap(async (req,res)=>{
     let {id}=req.params;
     let data= await Model.findById(id);
     res.render("./listings/edit",{data});
@@ -39,12 +41,12 @@ router.patch("/update/:id",ListingValidation,asyncWrap(async (req,res)=>{
     let data=req.body;
     let{id}=req.params;
     await Model.findOneAndUpdate({_id:id},data,{new:true,runValidator:true});
-    req.flash("success","listing updated successfully");
+    req.flash("success","listing updated!");
     res.redirect(`/show/${id}`);
 }));
 
 // Add form  route
-router.get("/new",(req,res)=>{
+router.get("/new",isLoggedIn,(req,res)=>{
     res.render("./listings/new");
 });
 
@@ -53,7 +55,7 @@ router.get("/new",(req,res)=>{
 router.post("/insert",ListingValidation,asyncWrap(async (req,res)=>{
     const newData=new Model(req.body);
     await newData.save();
-    req.flash("success","New listing added");
+    req.flash("success","listing added!");
     res.redirect("/listing");
 }));
 
@@ -66,10 +68,10 @@ router.get("/show/:id",asyncWrap(async (req,res)=>{
 }));
 
 // individual list delete route
-router.delete("/delete/:id",asyncWrap(async (req,res)=>{
+router.delete("/delete/:id",isLoggedIn,asyncWrap(async (req,res)=>{
     let {id}=req.params;
     await Model.findByIdAndDelete(id);
-    req.flash("deleted","listing deleted successfully");
+    req.flash("error","listing deleted!");
     res.redirect("/listing");
 }));
 

@@ -7,10 +7,30 @@ const SampleData=require("./init/data.js");
 const methodOverride=require("method-override");
 const ejsMate=require("ejs-mate");
 const customError=require("./utils/customError.js");
-const Listings=require("./routes/listingRoutes.js");
-const Reviews=require("./routes/reviewRoutes.js");
 const session=require("express-session");
 const flash=require("connect-flash");
+const passport=require("passport");
+const LocalStrategy=require("passport-local");
+const User=require("./models/user.js");
+
+// importing routes
+const Listings=require("./routes/listingRoutes.js");
+const Reviews=require("./routes/reviewRoutes.js");
+const Authentication=require("./routes/authenRoutes.js");
+
+
+
+// ----------DB connection-----------
+async function main(){
+    await mongoose.connect("mongodb://127.0.0.1:27017/wonderlust");
+}
+
+main().then((res)=>{
+    console.log("DB Connection Successfully..");
+}).catch((err)=>{
+    console.log("DB Do not Connection Successfully..");
+    console.log(err);
+});
 
 
 app.set("view engine","ejs");
@@ -36,24 +56,24 @@ app.listen(port,()=>{
     console.log("server is runing at "+port +"..........");
 });
 
-// ----------DB connection-----------
-async function main(){
-    await mongoose.connect("mongodb://127.0.0.1:27017/wonderlust");
-}
+// passport configaration
 
-main().then((res)=>{
-    console.log("DB Connection Successfully..");
-}).catch((err)=>{
-    console.log("DB Do not Connection Successfully..");
-    console.log(err);
-});
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+// use static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 // flash middleware
 app.use((req,res,next)=>{
     res.locals.FlashMeassage1=req.flash("success");
-    res.locals.FlashMeassage2=req.flash("deleted");
+    res.locals.FlashMeassage2=req.flash("error");
+    res.locals.currentUser=req.user;
     next();
 });
+
 
 // listing Rouets
 app.use("/",Listings);
@@ -61,6 +81,8 @@ app.use("/",Listings);
 // Review Routes..
 app.use("/",Reviews);
 
+// authentication routes
+app.use("/",Authentication);
 
 
 

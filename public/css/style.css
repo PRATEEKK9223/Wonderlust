@@ -16,6 +16,14 @@ body{
     height:4.5rem;    
 }
 
+@media (max-width: 768px) {
+  .nav-link{
+    color:rgb(244, 101, 6) !important;
+    background-color:#f8f9fa !important;
+    padding:10px;
+  }
+}
+
 /* --------footer---------- */
 .footer{
     background-color:#adb5bd;
