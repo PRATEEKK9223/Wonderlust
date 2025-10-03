@@ -1,13 +1,10 @@
 const Model=require("./models/listing.js");
 const customError=require("./utils/customError.js");
-const {schemaValidation}=require("./Schema.js");
-
-
-
-
+const {schemaValidation,reviewSchemaValidation}=require("./Schema.js");
 
 
 // midleware for schemavalidation
+
 // listing validation
 module.exports.ListingValidation =(req,res,next)=>{
     let data=req.body
@@ -18,7 +15,6 @@ module.exports.ListingValidation =(req,res,next)=>{
         next();
     }
 }
-
 
 // Review validation
 module.exports.Reviewvalidation=(req,res,next)=>{
@@ -32,6 +28,8 @@ module.exports.Reviewvalidation=(req,res,next)=>{
 
 
 // authentication check midleware
+
+// to check if user is logged in or not
 module.exports.isLoggedIn=(req,res,next)=>{
     if(!req.isAuthenticated()){
         // Only save redirect for GET requests
@@ -43,12 +41,13 @@ module.exports.isLoggedIn=(req,res,next)=>{
     }
     next();
 }
-
+// to save redirect url in res.locals
 module.exports.saveRedirectUrl=(req,res,next)=>{
     res.locals.redirectUrl=req.session.redirectUrl;
     next();
 }
 
+// to check if user is owner of the listing or not
 module.exports.isOwner=async(req,res,next)=>{
     let{id}=req.params;
     let list=await Model.findById(id);
