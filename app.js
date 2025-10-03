@@ -2,8 +2,6 @@ const express=require("express");
 const app=express();
 const path=require("path");
 const mongoose=require("mongoose");
-const Model=require("./models/listing.js");
-const SampleData=require("./init/data.js");
 const methodOverride=require("method-override");
 const ejsMate=require("ejs-mate");
 const customError=require("./utils/customError.js");
@@ -92,21 +90,7 @@ app.get("/",async (req,res)=>{
     res.send("this is the home page");
 });
 
-// Initialize route
-app.get("/initialize",async (req,res)=>{
-    await Model.insertMany(SampleData.data);
-    res.send("insered sucessfully");
-});
 
-// Delete every listing route 
-app.get("/delete",(req,res)=>{
-    Model.deleteMany().then((res)=>{
-        console.log(res)
-    }).catch((err)=>{
-        console.log(err)
-    })
-    res.send("deleted sucessfully")
-});
 
 
 
