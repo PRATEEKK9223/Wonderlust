@@ -1,24 +1,32 @@
-<nav class="navbar navbar-expand-md bg-body-tertiary w-100 fixed-top border-bottom " >
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-compass"></i>  WonderLust</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-md bg-body-tertiary w-100 fixed-top border-bottom">
+  <div class="container-fluid nav-container">
+    <a class="navbar-brand" href="/"><i class="fa-solid fa-compass"></i> WonderLust</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" 
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link" href="/">Home</a>
         <a class="nav-link active" aria-current="page" href="/listing">All Listings</a>
         <a class="nav-link" href="/new">New Listing</a>
       </div>
-       <div class="navbar-nav ms-auto">
-        <%if(currentUser){ %>
-          <a class="nav-link  bg-primary text-white rounded px-3 mx-1" href="/logout">log out</a>
-        <%}%>
-        <%if(!currentUser){%>
-           <a class="nav-link  bg-primary text-white rounded px-3 mx-1" href="/login">log in</a>
-            <a class="nav-link  bg-primary text-white rounded px-3 mx-1" href="/signup">sign up</a>
-        <%}%>  
-        </div>
+
+      <div class="navbar-nav ms-auto align-items-center nav-icon">
+        <!-- Theme Toggle Button with FontAwesome -->
+        <button id="theme-toggle" class="btn btn-outline-primary mx-2">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <% if(currentUser){ %>
+          <a class="nav-link nav-btn bg-primary text-white rounded px-3 mx-1" href="/logout">Log out</a>
+        <% } %>
+        <% if(!currentUser){ %>
+          <a class="nav-link nav-btn bg-primary text-white rounded px-3 mx-1" href="/login">Log in</a>
+          <a class="nav-link nav-btn bg-primary text-white rounded px-3 mx-1" href="/signup">Sign up</a>
+        <% } %>
+      </div>
     </div>
   </div>
 </nav>
