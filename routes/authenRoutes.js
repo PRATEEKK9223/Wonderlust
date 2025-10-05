@@ -1,66 +1,88 @@
-const express=require("express");
-const router=express.Router();
-const User=require("../models/user.js");
-const Model=require("../models/listing.js");
-const asyncWrap=require("../utils/asyncWrap.js");
-const passport=require("passport");
-const {saveRedirectUrl}=require("../midlewares.js");
+const express = require("express");
+const router = express.Router();
+const User = require("../models/user.js"); // User model for authentication
+const Model = require("../models/listing.js"); // Listing model (not used in this file but imported)
+const asyncWrap = require("../utils/asyncWrap.js"); // Utility to handle async errors
+const passport = require("passport"); // Passport for authentication
+const { saveRedirectUrl } = require("../midlewares.js"); // Middleware to store redirect URL after login
 
+// ----------------------- AUTH ROUTES ----------------------- //
 
-
-// Auth Routes
-// Register Routes
-router.get("/signup",(req,res)=>{
-   res.render("./user/signup");
+// ---------- Register Routes ---------- //
+// Render the signup form page
+router.get("/signup", (req, res) => {
+    res.render("./user/signup");
 });
 
-router.post("/signup",asyncWrap(async (req,res)=>{
-    try{
-        let {username,email,password}=req.body;
-        let NewUser=new User({
-            username:username,
-            email:email,
-        });
-        const registeredUser=await User.register(NewUser,password);
-        req.login(registeredUser,(err)=>{
-            if(err){
-                next(err);
-            }else{
-                req.flash("success","welcome to woderlust "+username);
-                res.redirect("/listing");    
-            }
-        })
-       
-    }catch(err){
-        req.flash("error",err.message);
-        res.redirect("/signup");
-    }
-}));
+// Handle signup form submission
+router.post(
+    "/signup",
+    asyncWrap(async (req, res) => {
+        try {
+            const { username, email, password } = req.body;
 
-// Login Routes
-router.get("/login",(req,res)=>{
+            // Create a new User instance
+            let NewUser = new User({
+                username: username,
+                email: email,
+            });
+
+            // Register the user with Passport (handles password hashing)
+            const registeredUser = await User.register(NewUser, password);
+
+            // Automatically log in the newly registered user
+            req.login(registeredUser, (err) => {
+                if (err) {
+                    next(err); // Pass error to Express error handler
+                } else {
+                    req.flash("success", "Welcome to Wonderlust, " + username);
+                    res.redirect("/listing"); // Redirect to listings page after successful signup
+                }
+            });
+        } catch (err) {
+            req.flash("error", err.message);
+            res.redirect("/signup"); // Redirect back to signup page if error occurs
+        }
+    })
+);
+
+// ---------- Login Routes ---------- //
+// Render the login form page
+router.get("/login", (req, res) => {
     res.render("./user/login");
 });
 
-router.post("/login",saveRedirectUrl,passport.authenticate('local', { failureRedirect: '/login', failureFlash: "Invalid username or password!",}),(req,res)=>{
-    req.flash("success","welcome back!");
-    if(res.locals.redirectUrl){
-         res.redirect(res.locals.redirectUrl);
-    }else{
-        res.redirect("/listing");
-    }   
-});
+// Handle login form submission
+router.post(
+    "/login",
+    saveRedirectUrl, // Save the original URL user wanted to access
+    passport.authenticate("local", {
+        failureRedirect: "/login",
+        failureFlash: "Invalid username or password!",
+    }),
+    (req, res) => {
+        req.flash("success", "Welcome back!");
 
-// Logout Routes
-router.get("/logout",(req,res)=>[
-    req.logout((err)=>{
-        if(err){
-            next(err);
-        }else{
-            req.flash("success","Logout successfully!!");
-            res.redirect("/listing");
+        // Redirect user to their original destination if stored
+        if (res.locals.redirectUrl) {
+            res.redirect(res.locals.redirectUrl);
+        } else {
+            res.redirect("/listing"); // Default redirect after login
         }
-    })
+    }
+);
+
+// ---------- Logout Route ---------- //
+// Handle user logout
+router.get("/logout", (req, res) => [
+    req.logout((err) => {
+        if (err) {
+            next(err); // Pass error to Express error handler
+        } else {
+            req.flash("success", "Logout successfully!");
+            res.redirect("/listing"); // Redirect to listings page after logout
+        }
+    }),
 ]);
 
-module.exports=router;
+module.exports = router;
