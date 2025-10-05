@@ -19,7 +19,7 @@ main().then((res)=>{
     console.log(err);
 });
 
-
+// TO start the server
 app.set("port",3000);
 const port=app.get("port");
 app.listen(port,()=>{
@@ -45,6 +45,15 @@ app.get("/delete",(req,res)=>{
 
 // To update the datby adding the owner to each
 app.get("/update",async (req,res)=>{
-    await Model.updateMany({},{$set:{owner:'68de7577754658088f9cf323'}});
+    await Model.updateMany({},{$set:{owner:'68dbcde683709119a1365b7a'}});
     res.send("Updted sucessfully..");
 });
+
+
+// Setup route to reset and add sample data
+app.get("/setup",async (req,res)=>{
+    await Model.deleteMany({});
+    await Model.insertMany(SampleData.data);
+    await Model.updateMany({},{$set:{owner:'68dbcde683709119a1365b7a'}});
+    res.send("setup done");
+})

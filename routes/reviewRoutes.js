@@ -1,6 +1,5 @@
 const express=require("express");
 const router=express.Router();
-
 const ReviewModel=require("../models/Review.js");
 const asyncWrap=require("../utils/asyncWrap.js");
 const Model=require("../models/listing.js");
