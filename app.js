@@ -39,7 +39,7 @@ app.use(express.json());
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"public")));
 
-
+// session and flash configaration
 app.use(session({
     secret:"prk_wonderlust",
     resave:false,
@@ -89,11 +89,6 @@ app.use("/",Authentication);
 app.get("/",async (req,res)=>{
     res.send("this is the home page");
 });
-
-
-
-
-
 
 
 // to get all invalid routes requests

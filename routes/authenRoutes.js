@@ -8,7 +8,8 @@ const {saveRedirectUrl}=require("../midlewares.js");
 
 
 
-
+// Auth Routes
+// Register Routes
 router.get("/signup",(req,res)=>{
    res.render("./user/signup");
 });
@@ -36,6 +37,7 @@ router.post("/signup",asyncWrap(async (req,res)=>{
     }
 }));
 
+// Login Routes
 router.get("/login",(req,res)=>{
     res.render("./user/login");
 });
@@ -49,7 +51,7 @@ router.post("/login",saveRedirectUrl,passport.authenticate('local', { failureRed
     }   
 });
 
-
+// Logout Routes
 router.get("/logout",(req,res)=>[
     req.logout((err)=>{
         if(err){
