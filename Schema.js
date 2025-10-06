@@ -31,7 +31,7 @@ const schemaValidation = joi.object({
 // Schema to validate review data before saving to the database
 const reviewSchemaValidation = joi.object({
     rating: joi.number()              // Review rating: 1 to 5
-        .min(1)
+        .min(0)
         .max(5)
         .required(),
     comment: joi.string()             // Review comment
