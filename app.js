@@ -1,108 +1,121 @@
-const express=require("express");
-const app=express();
-const path=require("path");
-const mongoose=require("mongoose");
-const methodOverride=require("method-override");
-const ejsMate=require("ejs-mate");
-const customError=require("./utils/customError.js");
-const session=require("express-session");
-const flash=require("connect-flash");
-const passport=require("passport");
-const LocalStrategy=require("passport-local");
-const User=require("./models/user.js");
+// ---------------------------IMPORTS---------------------------------
+const express = require("express");
+const app = express();
+const path = require("path");
+const mongoose = require("mongoose");
+const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
+const customError = require("./utils/customError.js");
+const session = require("express-session");
+const flash = require("connect-flash");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js");
 
-// importing routes
-const Listings=require("./routes/listingRoutes.js");
-const Reviews=require("./routes/reviewRoutes.js");
-const Authentication=require("./routes/authenRoutes.js");
+// Importing route modules
+const Listings = require("./routes/listingRoutes.js");
+const Reviews = require("./routes/reviewRoutes.js");
+const Authentication = require("./routes/authenRoutes.js");
 
-
-
-// ----------DB connection-----------
-async function main(){
+// ---------------------------DATABASE CONNECTION--------------------
+// Connect to MongoDB using Mongoose
+async function main() {
     await mongoose.connect("mongodb://127.0.0.1:27017/wonderlust");
 }
 
-main().then((res)=>{
-    console.log("DB Connection Successfully..");
-}).catch((err)=>{
-    console.log("DB Do not Connection Successfully..");
-    console.log(err);
-});
+main()
+    .then(() => console.log("DB Connection Successfully.."))
+    .catch((err) => {
+        console.log("DB Connection Failed..");
+        console.log(err);
+    });
 
+// ---------------------------APP CONFIGURATION----------------------
+// Set EJS as templating engine
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "/views"));
+app.engine("ejs", ejsMate);
 
-app.set("view engine","ejs");
-app.set("views",path.join(__dirname,"/views"));
-app.use(methodOverride('_method'));
-app.use(express.urlencoded({extended:true}));
+// Middleware to parse request bodies
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.engine("ejs",ejsMate);
-app.use(express.static(path.join(__dirname,"public")));
 
-// session and flash configaration
+// Middleware to support PUT/PATCH/DELETE via forms
+app.use(methodOverride('_method'));
+
+// Serve static files from 'public' folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// ---------------------------SESSION & FLASH------------------------
+// Configure session for user authentication
 app.use(session({
-    secret:"prk_wonderlust",
-    resave:false,
-    saveUninitialized:true,
+    secret: "prk_wonderlust", // secret for signing session ID cookie
+    resave: false, // avoid resaving session if not modified
+    saveUninitialized: true, // save new sessions
 }));
+
+// Enable flash messages for notifications
 app.use(flash());
 
-
-app.set("port",3000);
-const port=app.get("port");
-app.listen(port,()=>{
-    console.log("server is runing at "+port +"..........");
-});
-
-// passport configaration
-
+// ---------------------------PASSPORT CONFIGURATION-----------------
+// Initialize passport and session support
 app.use(passport.initialize());
 app.use(passport.session());
+
+// Configure passport to use local strategy with User model
 passport.use(new LocalStrategy(User.authenticate()));
-// use static serialize and deserialize of model for passport session support
+
+// Serialize and deserialize user for session persistence
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-// flash middleware
-app.use((req,res,next)=>{
-    res.locals.FlashMeassage1=req.flash("success");
-    res.locals.FlashMeassage2=req.flash("error");
-    res.locals.currentUser=req.user;
+// ---------------------------FLASH MIDDLEWARE-----------------------
+// Make flash messages & current user available in all templates
+app.use((req, res, next) => {
+    res.locals.FlashMeassage1 = req.flash("success");
+    res.locals.FlashMeassage2 = req.flash("error");
+    res.locals.currentUser = req.user;
     next();
 });
 
+// ---------------------------ROUTES---------------------------------
+// Listing routes
+app.use("/", Listings);
 
-// listing Rouets
-app.use("/",Listings);
+// Review routes
+app.use("/", Reviews);
 
-// Review Routes..
-app.use("/",Reviews);
+// Authentication routes
+app.use("/", Authentication);
 
-// authentication routes
-app.use("/",Authentication);
-
-
-
-// -----------------------------Routes-------------------------------------
-// home route
-app.get("/",async (req,res)=>{
-    res.send("this is the home page");
+// Home route
+app.get("/", async (req, res) => {
+    res.send("This is the home page");
 });
 
-
-// to get all invalid routes requests
-app.use((req,res,next)=>{
-    next(new customError(404,"page Not Found"));
+// ---------------------------ERROR HANDLING------------------------
+// Catch-all for invalid routes (404)
+app.use((req, res, next) => {
+    next(new customError(404, "Page Not Found"));
 });
 
-// Error handling middleware...
-app.use((err,req,res,next)=>{
-    const {status=500,message="Somthing went wrong"} = err;
-    if(status===404){
-        res.render("./listings/PageNotFound",{err});
-    }else{
-        res.render("./listings/Error",{err});
+// Centralized error handling middleware
+app.use((err, req, res, next) => {
+    const { status = 500, message = "Something went wrong" } = err;
+
+    if (status === 404) {
+        // Render custom 404 page
+        res.render("./listings/PageNotFound", { err });
+    } else {
+        // Render generic error page for other errors
+        res.render("./listings/Error", { err });
     }
 });
- 
+
+// ---------------------------SERVER LISTEN--------------------------
+app.set("port", 3000);
+const port = app.get("port");
+
+app.listen(port, () => {
+    console.log("Server is running at " + port + "...");
+});

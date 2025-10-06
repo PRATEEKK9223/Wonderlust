@@ -1,3 +1,4 @@
+
 const express=require("express");
 const router=express.Router();
 // const Model=require("../models/listing.js");
@@ -5,6 +6,8 @@ const asyncWrap=require("../utils/asyncWrap.js");
 const {ListingValidation,isLoggedIn,isOwner}=require("../midlewares.js");
 const listingControllers=require("../controllers/listings.js");
 
+
+// ------------------- LISTING ROUTES ------------------- //
 
 
 // Listing route
@@ -21,6 +24,7 @@ router.patch("/update/:id",ListingValidation,isOwner,asyncWrap(listingController
 router.get("/new",isLoggedIn,listingControllers.renderNewForm);
 
 
+ 
 // Add route
 router.post("/insert",ListingValidation,asyncWrap(listingControllers.insertListing));
 
@@ -31,4 +35,6 @@ router.get("/show/:id",asyncWrap(listingControllers.showListing));
 router.delete("/delete/:id",isLoggedIn,isOwner,asyncWrap(listingControllers.destroyListing));
 
 
-module.exports=router;
+
+
+module.exports = router;

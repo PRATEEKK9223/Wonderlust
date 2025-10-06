@@ -1,3 +1,4 @@
+
 const express=require("express");
 const router=express.Router();
 
@@ -8,6 +9,9 @@ const {Reviewvalidation,isLoggedIn}=require("../midlewares.js");
 const reviewsController=require("../controllers/reviews.js");
 
 
+// ------------------- REVIEW ROUTES ------------------- //
+
+
 // Review post route
 router.post("/listing/:id/review",isLoggedIn,Reviewvalidation,asyncWrap(reviewsController.addReview));
 
@@ -15,5 +19,5 @@ router.post("/listing/:id/review",isLoggedIn,Reviewvalidation,asyncWrap(reviewsC
 router.delete("/listing/:id/review/:reviewId",isLoggedIn,reviewsController.destroyReview);
 
 
-
-module.exports=router;
+ 
+module.exports = router;

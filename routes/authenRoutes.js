@@ -1,3 +1,4 @@
+
 const express=require("express");
 const router=express.Router();
 // const User=require("../models/user.js");
@@ -8,6 +9,7 @@ const {saveRedirectUrl}=require("../midlewares.js");
 const userControllers=require("../controllers/users.js");
 
 
+// ----------------------- AUTH ROUTES ----------------------- //
 
 // // Signupform render route
 // router.get("/signup",userControllers.renderSignupForm);
@@ -36,4 +38,5 @@ router.route("/login")
 // Logout route
 router.get("/logout",userControllers.logout);
 
-module.exports=router;
+
+module.exports = router;
