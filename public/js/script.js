@@ -17,3 +17,18 @@
     }, false)
   })
 })()
+
+// JavaScript for Dark/Light Toggle
+const toggleBtn = document.getElementById('theme-toggle');
+const toggleIcon = toggleBtn.querySelector('i');
+
+// Load saved theme
+const currentTheme = localStorage.getItem('theme') || 'light';
+document.body.classList.toggle('dark-theme', currentTheme === 'dark');
+toggleIcon.className = currentTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+
+toggleBtn.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark-theme');
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  toggleIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+});

@@ -1,27 +1,25 @@
 <% layout('/layouts/boilerplate') -%>
 
 <body>
-    
-    <div class="container-fluid">
-        <div class="row col-12 gx-3 gy-2 offset-1">
-            <% list.forEach((item)=>{ %>
-                
-                    <div class="card ms-3" style="width: 18rem;">
-                        <a href="/show/<%=item._id%>" class="card-link">
-                            <img src="<%=item.image.url%>" class="img" alt="<%=item.image.filename%>">
-                            <div class="card-body">
-                                <p class="card-text">
-                                    <b><%=item.title%></b> <br>
-                                    <%=item.price.toLocaleString("en-IN")+ "/night" %>
-                                </p>
-                            </div>
-                        </a>
-                    </div>
-                
-            <% })%>
+  <div class="container py-4">
+    <div class="row justify-content-center g-4">
+      <% sampleListings.forEach((item) => { %>
+        <div class="col-auto d-flex justify-content-center">
+          <div class="card listing-card border-0 shadow-sm" style="width: 280px;">
+            <a href="/show/<%= item._id %>" class="text-decoration-none text-dark">
+              <img src="<%= item.image.url %>" alt="<%= item.image.filename %>" style="height: 200px; object-fit: cover; width: 100%;">
+              <div class="card-body text-center">
+                <h6 class="card-title mb-1 fw-bold">
+                  <%= item.title %>
+                </h6>
+                <p class="card-text price mb-0">
+                  ₹<%= item.price.toLocaleString("en-IN") %> / night
+                </p>
+              </div>
+            </a>
+          </div>
         </div>
+      <% }) %>
     </div>
-    
-   
+  </div>
 </body>
-

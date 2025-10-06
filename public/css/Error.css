@@ -57,3 +57,36 @@
     font-size:2rem;
 
 }
+
+/* --------- Dark Theme for Error Pages --------- */
+body.dark-theme .page,
+body.dark-theme .page2,
+body.dark-theme .container {
+    background-color: #1e1e1e;  /* dark background */
+    color: #f5f5f5;             /* light text */
+}
+
+body.dark-theme #img {
+    border: 2px solid #444;      /* subtle border around image */
+}
+
+/* Optional: make links/buttons visible in dark theme */
+body.dark-theme a,
+body.dark-theme button {
+    color: #f5f5f5;
+}
+
+body.dark-theme a:hover,
+body.dark-theme button:hover {
+    color: #ffd700; /* highlight color on hover */
+}
+
+/* Media query remains same */
+@media(max-width:800px){
+    body.dark-theme :root{
+        font-size:40%;
+    }
+    body.dark-theme .page{
+        flex-direction:column;
+    }
+}
