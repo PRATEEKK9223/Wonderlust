@@ -1,85 +1,87 @@
 <%- layout("/layouts/boilerplate") %>
+
 <body>
-    <div class="container show">
-         <div class="Card mb-3">
-            <h5 class="card-title mb-1"><b><%=data.title%></b></h5>
-            <img src="<%=data.image.url%>" class="card-img-top mb-3" alt="...">
-            <div class="card-body">
-                <p>Owned by @<%= data.owner.username%></p>
-                <p class="card-text"><%=data.description%>
-                <br>
-                <%= "₹" + data.price.toLocaleString("en-IN") + "/night" %>
-                <br>
-                <%=data.location%>
-                <br>
-                <%=data.country%>
-            </div>
-             <!-- only show edit and delete button if the current user is the owner of the listing -->
-            <% if(currentUser && data.owner._id.equals(currentUser._id)){ %> 
-             <div class="bts mt-3">
-                <form method="get" action="/edit/<%=data._id %>">
-                <button class="btn btn-primary"> Edit </button>
-                </form>
-                <form method="POST" action="/delete/<%=data._id %>?_method=DELETE">
-                    <button class="btn btn-danger"> Delete </button>
-                </form>
-            </div>
-              <% } %> 
+  <div class="container py-5">
+    <!-- Main Listing Card -->
+    <div class="Card mx-auto shadow-lg p-4 mb-4 rounded-3" style="max-width: 700px; background-color: #fff;">
+      <h3 class="fw-bold mb-3 text-center"><%= data.title %></h3>
+      <img src="<%= data.image.url %>" class="img-fluid rounded mb-4" alt="<%= data.image.filename %>" style="height: 350px; object-fit: cover; width: 100%;">
+      
+      <div class="card-body">
+        <p class="mb-2 text-muted">Owned by <strong>@<%= data.owner.username %></strong></p>
+        <p class="mb-3"><%= data.description %></p>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center">
+          <p class="fw-bold fs-5 text-success mb-0">
+            ₹<%= data.price.toLocaleString("en-IN") %> / night
+          </p>
+          <div class="text-secondary text-end">
+            <p class="mb-0"><%= data.location %></p>
+            <p class="mb-0"><%= data.country %></p>
+          </div>
         </div>
-       
-            <hr>
+      </div>
 
-         <!-- Adding the Review form here  -->
-             <div class="container col-6">
-                <h2 class="mb-4 fst-normal">Leave a Review</h2>
-                <form action="/listing/<%=data._id%>/review" method="POST" novalidate class="needs-validation">
-                    <div class="mb-3">
-                        <lable for="rating">Rating</lable>
-                        <input type="range" name="rating" id="rating" class="form-range" min="0" max="5" required value="0" required>
-                        <div class="invalid-feedback">
-                            please add a Ratingsssss
-                        </div>
-                    </div>
-                     <div class="mb-3">
-                        <lable for="comment">Comment</lable>
-                        <textarea name="comment" id="comment" class="form-control" rows="6" required></textarea>
-                        <div class="invalid-feedback">
-                            please add a comment
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-outline-dark">submit</button>
-                </form>
-             </div>
-
-             <hr>
-
-              <!-- this is for shwing the reviews.. -->
-
-             <div class="container col-8 my-4">
-                    <h3 class="mb-3">All Reviews</h3>
-                    <div class="row g-3">
-                        <% for(review of data.Reviews){ %>
-                        <div class="col-md-6"> <!-- 2 columns on medium+ screens -->
-                            <div class="card shadow-sm h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">@<%=review.author.username%></h5>
-                                <p class="card-text"><%= review.comment %></p>
-                                <p class="card-text text-warning fw-bold">
-                                <%= review.rating %> ⭐
-                                </p>
-                            </div>
-                            <form action="/listing/<%=data._id%>/review/<%=review._id%>?_method=DELETE" method="POST" class="m-2">
-                                <button class="btn btn-dark">Delete</button>
-                            </form>
-                            </div>
-                            
-                        </div>
-                        <% } %>
-                    </div>
-                    </div>
-
-
-
+      <!-- Owner Buttons -->
+      <% if(currentUser && data.owner._id.equals(currentUser._id)){ %>
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <form method="get" action="/edit/<%=data._id%>">
+          <button class="btn btn-primary px-4">Edit</button>
+        </form>
+        <form method="POST" action="/delete/<%=data._id%>?_method=DELETE">
+          <button class="btn btn-danger px-4">Delete</button>
+        </form>
+      </div>
+      <% } %>
     </div>
+
+    <hr class="my-5">
+
+    <!-- Review Form -->
+    <div class="col-lg-6 mx-auto mb-5">
+      <h3 class="mb-4 text-center fw-semibold">Leave a Review</h3>
+      <form action="/listing/<%=data._id%>/review" method="POST" novalidate class="needs-validation p-4 rounded shadow-sm" style="background-color: #f8f9fa;">
+        <div class="mb-4">
+          <label for="rating" class="form-label fw-semibold">Rating</label>
+          <input type="range" name="rating" id="rating" class="form-range" min="0" max="5" required value="0">
+          <div class="invalid-feedback">Please add a rating.</div>
+        </div>
+
+        <div class="mb-4">
+          <label for="comment" class="form-label fw-semibold">Comment</label>
+          <textarea name="comment" id="comment" class="form-control" rows="5" required></textarea>
+          <div class="invalid-feedback">Please add a comment.</div>
+        </div>
+
+        <div class="text-center">
+          <button class="btn btn-dark px-5 py-2">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Reviews Section -->
+    <div class="col-lg-8 mx-auto">
+      <h3 class="mb-4 fw-semibold text-center">All Reviews</h3>
+      <div class="row g-4">
+        <% for(review of data.Reviews){ %>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm h-100 rounded-3">
+            <div class="card-body">
+              <h6 class="card-title fw-bold">@<%= review.author.username %></h6>
+              <p class="card-text text-muted"><%= review.comment %></p>
+              <p class="card-text text-warning fw-bold mb-0">
+                <%= review.rating %> ⭐
+              </p>
+            </div>
+            <form action="/listing/<%=data._id%>/review/<%=review._id%>?_method=DELETE" method="POST" class="m-2">
+              <button class="btn btn-outline-dark w-100">Delete</button>
+            </form>
+          </div>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
 </body>

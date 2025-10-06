@@ -155,19 +155,101 @@ label {
 
 
 
+/* ------------------ Card ------------------ */
 .Card {
-    width: 50%;
+  background-color: #fff;
+  color: #222;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
 }
 
 .Card img {
-    border-radius: 10px;
-    width: 100%;
-    height: 300px;
+  border-radius: 12px;
+  object-fit: cover;
+  width: 100%;
+  height: 350px;
+  transition: transform 0.4s ease;
 }
 
-.bts {
-    display: flex;
-    gap: 10px;
+.Card:hover img {
+  transform: scale(1.03);
+}
+
+.Card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* ------------------ Buttons ------------------ */
+.Card .btn {
+  transition: all 0.3s ease;
+}
+
+.Card .btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+/* ------------------ Review Form ------------------ */
+form.needs-validation {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+form.needs-validation:hover {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+/* ------------------ Review Cards ------------------ */
+.row .card {
+  background-color: #fff;
+  color: #222;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.row .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* -------- Listing -------- */
+.listing-card {
+    transition: all 0.3s ease;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #fff;
+    color: #222222;
+}
+
+.listing-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.listing-card img {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.listing-card:hover img {
+    transform: scale(1.05);
+}
+
+.listing-card .card-body {
+    background: #fff;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.listing-card:hover .card-body {
+    background: #f9f9f9;
 }
 
 /* -------- Dark Theme -------- */
@@ -247,4 +329,87 @@ body.dark-theme .Card {
     background-color: #1f1f1f;
     color: #e0e0e0;
     border: 1px solid #333;
+}
+
+/* -------- Dark Theme (Listing) -------- */
+body.dark-theme .listing-card {
+    background-color: #1f1f1f;
+    color: #e0e0e0;
+    border: 1px solid #333;
+    box-shadow: none;
+}
+
+body.dark-theme .listing-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.08);
+}
+
+body.dark-theme .listing-card img {
+    filter: brightness(0.8);
+}
+
+body.dark-theme .listing-card:hover img {
+    transform: scale(1.05);
+    filter: brightness(0.9);
+}
+
+body.dark-theme .listing-card .card-body {
+    background: #1f1f1f;
+}
+
+body.dark-theme .listing-card:hover .card-body {
+    background: #2a2a2a;
+}
+
+body.dark-theme .listing-card .card-title {
+    color: #ffffff;
+}
+
+body.dark-theme .listing-card .card-text {
+    color: #cccccc;
+}
+
+body.dark-theme .Card {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  box-shadow: 0 4px 20px rgba(255,255,255,0.05);
+}
+
+body.dark-theme .Card:hover {
+  box-shadow: 0 10px 25px rgba(255,255,255,0.08);
+}
+
+body.dark-theme .Card img {
+  filter: brightness(0.85);
+}
+
+body.dark-theme form.needs-validation {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  box-shadow: 0 4px 20px rgba(255,255,255,0.05);
+}
+
+body.dark-theme .row .card {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  box-shadow: 0 4px 15px rgba(255,255,255,0.03);
+}
+
+body.dark-theme .row .card:hover {
+  box-shadow: 0 8px 20px rgba(255,255,255,0.07);
+}
+
+body.dark-theme .btn {
+  border-color: #e0e0e0;
+  color: #e0e0e0;
+}
+
+body.dark-theme .btn-outline-dark {
+  border-color: #e0e0e0;
+  color: #e0e0e0;
+}
+
+body.dark-theme .btn-outline-dark:hover {
+  background-color: #e0e0e0;
+  color: #121212;
 }
