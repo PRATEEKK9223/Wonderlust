@@ -5,6 +5,10 @@ const router=express.Router();
 const asyncWrap=require("../utils/asyncWrap.js");
 const {ListingValidation,isLoggedIn,isOwner}=require("../midlewares.js");
 const listingControllers=require("../controllers/listings.js");
+const multer  = require('multer');
+const{storage}=require("../cloudConfigure.js");
+const upload = multer({ storage });
+
 
 
 // ------------------- LISTING ROUTES ------------------- //
@@ -18,7 +22,7 @@ router.get("/listing",asyncWrap(listingControllers.index));
 router.get("/edit/:id",isLoggedIn,isOwner,asyncWrap(listingControllers.renderEditForm));
 
 // update route
-router.patch("/update/:id",ListingValidation,isOwner,asyncWrap(listingControllers.updateListing));
+router.patch("/update/:id",upload.single("image"),ListingValidation,isOwner,asyncWrap(listingControllers.updateListing));
 
 // Add form  route
 router.get("/new",isLoggedIn,listingControllers.renderNewForm);
@@ -26,7 +30,7 @@ router.get("/new",isLoggedIn,listingControllers.renderNewForm);
 
  
 // Add route
-router.post("/insert",ListingValidation,asyncWrap(listingControllers.insertListing));
+router.post("/insert",upload.single("image"),asyncWrap(listingControllers.insertListing));
 
 // route for individual item
 router.get("/show/:id",asyncWrap(listingControllers.showListing));

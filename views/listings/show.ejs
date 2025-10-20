@@ -3,7 +3,7 @@
     <div class="container show">
          <div class="Card mb-3">
             <h5 class="card-title mb-1"><b><%=data.title%></b></h5>
-            <img src="<%=data.image.url%>" class="card-img-top mb-3" alt="...">
+            <img src="<%=data.image.url%>" class="card-img-top mb-3" alt="<%=data.image.filename%>">
             <div class="card-body">
                 <p>Owned by @<%= data.owner.username%></p>
                 <p class="card-text"><%=data.description%>

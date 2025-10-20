@@ -14,6 +14,11 @@ module.exports.renderEditForm=async (req,res)=>{
 
 module.exports.updateListing=async (req,res)=>{
     let data=req.body;
+    if(req.file){
+        let url=req.file.path;
+        let filename=req.file.originalname;
+        data.image={url,filename};
+    }
     let{id}=req.params;
     await Model.findOneAndUpdate({_id:id},data,{new:true,runValidator:true});
     req.flash("success","listing updated!");
@@ -25,6 +30,9 @@ module.exports.renderNewForm=(req,res)=>{
 };
 
 module.exports.insertListing=async (req,res)=>{
+    let url=req.file.path;
+    let filename=req.file.originalname;
+    req.body.image={url,filename};
     const newData=new Model(req.body);
     newData.owner=req.user._id;
     await newData.save();
