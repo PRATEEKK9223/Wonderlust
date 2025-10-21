@@ -68,5 +68,7 @@ app.get("/setup", async (req, res) => {
     // Update all listings with a fixed owner ID
     await Model.updateMany({}, { $set: { owner: '68dbcde683709119a1365b7a' } });
 
+    await Model.updateMany({}, { $set: { geometry: { type: "Point", coordinates: [-74.0060, 40.7128 ] } } });
+
     res.send("Database setup completed successfully.");
 });
