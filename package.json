@@ -9,6 +9,7 @@
   "author": "Prateek k",
   "license": "ISC",
   "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.16.2",
     "cloudinary": "^2.7.0",
     "connect-flash": "^0.1.1",
     "dotenv": "^17.2.3",

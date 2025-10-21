@@ -1,4 +1,5 @@
 <%- layout("/layouts/boilerplate") %>
+
 <body>
     <div class="container show">
          <div class="Card mb-3">
@@ -66,7 +67,10 @@
               <!-- this is for showing the reviews.. -->
 
              <div class="container col-8 my-4">
-                    <h3 class="mb-3">All Reviews</h3>
+                    <%if(data.Reviews.length!==0){ %>
+                        <h3 class="mb-3">All Reviews</h3>
+                    <%}%>
+                    
                     <div class="row g-3">
                         <% for(review of data.Reviews){ %>
                         <div class="col-md-6"> <!-- 2 columns on medium+ screens -->
@@ -85,9 +89,17 @@
                         </div>
                         <% } %>
                     </div>
-                    </div>
+            </div>
+            
 
-
+            <div class="conatiner col-8 mt-5 mb-5">
+                <h3 class="mb-3">Where you’ll be</h3>
+                 <div id="map" style="width:100%; height:400px;"></div>
+            </div>
 
     </div>
+  <script>
+        const listing=<%- JSON.stringify(data) %>;
+  </script>
+       
 </body>
