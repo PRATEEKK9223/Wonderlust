@@ -8,7 +8,7 @@ body{
 
 /* ------Nav-bar--------------- */
 .navbar-brand,.navbar-brand:hover{
-    color:red;
+    color:#FF5A5F;
     font-size:25px;
 }
 .navbar{
@@ -119,3 +119,29 @@ label{
     
 }
 
+.add-home{
+    border:1px solid black;
+    border-radius:25px;
+}
+
+.explore{
+    font-size:20px;
+    font-family: sans-serif;
+    font-weight:500;
+}
+
+.search-btn{
+    background-color:#FF5A5F;
+    border:none;
+    color:white;
+    border-radius:25px;
+
+}
+
+.search-bar{
+    border-radius:25px;
+}
+
+.buttons{
+     background-color:#FF5A5F;
+}
