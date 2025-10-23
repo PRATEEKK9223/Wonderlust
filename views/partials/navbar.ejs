@@ -1,24 +1,42 @@
-<nav class="navbar navbar-expand-md bg-body-tertiary w-100 fixed-top border-bottom " >
+<nav class="navbar navbar-expand-md bg-body-tertiary w-100 fixed-top border-bottom">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-compass"></i>  WonderLust</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand d-none d-md-inline" href="/listing">
+      <i class="fa-solid fa-compass"></i> WonderLust
+    </a>
+
+    <!-- Hamburger button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
+
+    <!-- Collapsible section -->
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link active" aria-current="page" href="/listing">All Listings</a>
-        <a class="nav-link" href="/new">New Listing</a>
+      <div class="navbar-nav me-auto">
+        <a class="nav-link active explore" aria-current="page" href="/listing"><i>Explore</i></a>
       </div>
-       <div class="navbar-nav ms-auto">
-        <%if(currentUser){ %>
-          <a class="nav-link  bg-primary text-white rounded px-3 mx-1" href="/logout">log out</a>
-        <%}%>
-        <%if(!currentUser){%>
-           <a class="nav-link  bg-primary text-white rounded px-3 mx-1" href="/login">log in</a>
-            <a class="nav-link  bg-primary text-white rounded px-3 mx-1" href="/signup">sign up</a>
-        <%}%>  
-        </div>
+
+      <form class="d-flex my-2 my-md-0" role="search">
+        <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" />
+        <button class="btn search-btn" type="submit">Search</button>
+      </form>
+
+      <div class="navbar-nav ms-md-auto mt-2 mt-md-0">
+        <a class="nav-link add-home me-2" href="/new">Become a host</a>
+        <% if (currentUser) { %>
+          <a class="nav-link buttons text-white rounded px-3 mx-1" href="/logout">Log out</a>
+        <% } else { %>
+          <a class="nav-link buttons text-white rounded px-3 mx-1" href="/login">Log in</a>
+          <a class="nav-link buttons text-white rounded px-3 mx-1" href="/signup">Sign up</a>
+        <% } %>
+      </div>
     </div>
   </div>
 </nav>

@@ -7,6 +7,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const customError = require("./utils/customError.js");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -21,7 +22,7 @@ const Authentication = require("./routes/authenRoutes.js");
 // ---------------------------DATABASE CONNECTION--------------------
 // Connect to MongoDB using Mongoose
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/wonderlust");
+    await mongoose.connect(process.env.MANGO_ATLAS_URL); //"mongodb://127.0.0.1:27017/wonderlust"(for local)
 }
 
 main()
@@ -48,9 +49,22 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, "public")));
 
 // ---------------------------SESSION & FLASH------------------------
+
+const store = MongoStore.create({
+  mongoUrl: process.env.MANGO_ATLAS_URL,
+  crypto: {
+    secret: process.env.SECRETE,
+  },
+  toucgAfter:24*3600,
+
+})
+store.on("error",()=>{
+    console.log("Session Store Error");
+})
 // Configure session for user authentication
 app.use(session({
-    secret: "prk_wonderlust", // secret for signing session ID cookie
+    store,
+    secret: process.env.SECRETE, // secret for signing session ID cookie
     resave: false, // avoid resaving session if not modified
     saveUninitialized: true, // save new sessions
 }));
@@ -89,10 +103,6 @@ app.use("/", Reviews);
 // Authentication routes
 app.use("/", Authentication);
 
-// Home route
-app.get("/", async (req, res) => {
-    res.send("This is the home page");
-});
 
 // ---------------------------ERROR HANDLING------------------------
 // Catch-all for invalid routes (404)
